@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AquaFix Plumbing — Your Trusted Local Plumber in Sydney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c2.2 3 6 7 6 10.8a6 6 0 0 1-12 0C6 9.5 9.8 5.5 12 2.5z"/></svg>
+      </span>
+      AquaFix Plumbing
+    </a>
+
+    <nav class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#why">Why Us</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost">Login</a>
+      <a href="tel:0280001234" class="btn btn-orange">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Call Now
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- mobile drawer -->
+<div class="drawer" id="drawer">
+  <div class="drawer-bg" data-close></div>
+  <div class="drawer-panel">
+    <div class="drawer-top">
+      <span class="brand"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c2.2 3 6 7 6 10.8a6 6 0 0 1-12 0C6 9.5 9.8 5.5 12 2.5z"/></svg></span></span>
+      <button class="nav-toggle" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <a class="dlink" href="#services" data-close>Services</a>
+    <a class="dlink" href="#why" data-close>Why Us</a>
+    <a class="dlink" href="#gallery" data-close>Gallery</a>
+    <a class="dlink" href="#reviews" data-close>Reviews</a>
+    <a class="dlink" href="#contact" data-close>Contact</a>
+    <div class="drawer-actions">
+      <a href="#" class="btn btn-ghost" data-close>Login</a>
+      <a href="tel:0280001234" class="btn btn-orange" data-close>Call (02) 8000 1234</a>
+    </div>
+  </div>
+</div>
+
+<span id="top"></span>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+
+    <!-- left: form card -->
+    <div class="hero-card">
+      <div id="heroFormWrap">
+        <h1>The Same-Day <span class="text-orange">Plumbing</span> Service</h1>
+        <div class="hero-rating">
+          <span class="stars" data-stars="5"></span>
+          <span class="score">4.9</span>
+          <span class="gmark" id="heroG"></span>
+        </div>
+        <a href="tel:0280001234" class="hero-phonebtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          (02) 8000 1234
+        </a>
+        <ul class="hero-checks" id="heroChecks"></ul>
+
+        <form class="hero-form" id="heroForm" novalidate>
+          <div class="hgrid">
+            <div class="hfield"><input type="text" name="name" placeholder="Name" required></div>
+            <div class="hfield"><input type="tel" name="phone" placeholder="Phone" required></div>
+            <div class="hfield"><input type="email" name="email" placeholder="Email" required></div>
+            <div class="hfield"><input type="text" name="suburb" placeholder="Suburb"></div>
+            <div class="hfield full">
+              <select name="service">
+                <option value="">Select Service…</option>
+                <option>Emergency Plumbing</option>
+                <option>Blocked Drains</option>
+                <option>Hot Water Systems</option>
+                <option>Leak Detection</option>
+                <option>Bathroom Renovations</option>
+                <option>Gas Fitting</option>
+              </select>
+            </div>
+            <div class="hfield"><input type="date" name="date"></div>
+            <div class="hfield">
+              <select name="time">
+                <option value="">Preferred Time…</option>
+                <option>Morning (8am–12pm)</option>
+                <option>Afternoon (12pm–5pm)</option>
+                <option>Evening (5pm–8pm)</option>
+                <option>ASAP / Emergency</option>
+              </select>
+            </div>
+            <div class="hfield full"><textarea name="message" placeholder="Message"></textarea></div>
+          </div>
+          <div class="hero-submit">
+            <button type="submit" class="btn btn-orange">Submit</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="hero-success" id="heroSuccess">
+        <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h2>Thanks — request received!</h2>
+        <p>One of our Sydney plumbers will call you back within the hour.</p>
+      </div>
+    </div>
+
+    <!-- right: team photo -->
+    <div class="hero-photo">
+      <image-slot id="hero-photo" shape="rect" fit="cover" placeholder="Drop your team photo"></image-slot>
+      <div class="hero-offer">
+        <span class="tag">Our Offering!</span>
+        <div class="box">$0 Call-Out<br>Fee</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hero-strip">
+    <div class="wrap" id="heroStrip"></div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="section section--grey" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What We Do</span>
+      <h2>Plumbing Services Across Sydney</h2>
+      <p>Residential and commercial — done right the first time.</p>
+    </div>
+    <div class="svc-grid" id="svcGrid"></div>
+  </div>
+</section>
+
+<!-- ============ WHY CHOOSE US ============ -->
+<section class="section" id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Why Choose Us</span>
+      <h2>Sydney's Most Trusted Plumbers</h2>
+    </div>
+    <div class="why-grid" id="whyGrid"></div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section class="section section--grey" id="gallery">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Our Work</span>
+      <h2>Recent Jobs</h2>
+      <p>A snapshot of recent work across Sydney homes.</p>
+    </div>
+
+    <div class="gallery-page active" data-page="0">
+      <div class="masonry">
+        <image-slot id="g1" style="height:300px" placeholder="bathroom reno"></image-slot>
+        <image-slot id="g2" style="height:230px" placeholder="kitchen sink fit-off"></image-slot>
+        <image-slot id="g3" style="height:240px" placeholder="copper pipe repair"></image-slot>
+        <image-slot id="g4" style="height:300px" placeholder="garden line dig"></image-slot>
+        <image-slot id="g5" style="height:250px" placeholder="hot water unit install"></image-slot>
+        <image-slot id="g6" style="height:220px" placeholder="new tapware"></image-slot>
+      </div>
+    </div>
+    <div class="gallery-page" data-page="1">
+      <div class="masonry">
+        <image-slot id="g7" style="height:240px" placeholder="drain CCTV"></image-slot>
+        <image-slot id="g8" style="height:300px" placeholder="laundry rough-in"></image-slot>
+        <image-slot id="g9" style="height:230px" placeholder="gas cooktop fit"></image-slot>
+        <image-slot id="g10" style="height:300px" placeholder="vanity install"></image-slot>
+        <image-slot id="g11" style="height:230px" placeholder="leak repair"></image-slot>
+        <image-slot id="g12" style="height:250px" placeholder="commercial fit-out"></image-slot>
+      </div>
+    </div>
+
+    <div class="dots" id="galleryDots">
+      <button class="active" data-go="0" aria-label="Page 1"></button>
+      <button data-go="1" aria-label="Page 2"></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section class="section" id="reviews">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Reviews</span>
+      <h2>What Sydney Customers Say</h2>
+    </div>
+    <div class="rev-viewport">
+      <div class="rev-track" id="revTrack"></div>
+    </div>
+    <div class="carousel-nav">
+      <button class="cnav" id="revPrev" aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div class="rev-dots" id="revDots"></div>
+      <button class="cnav" id="revNext" aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOOKING ============ -->
+<section class="section section--grey" id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Book Now</span>
+      <h2>Book Your Plumber Today</h2>
+      <p>Tell us what's going on — we'll get back within the hour.</p>
+    </div>
+
+    <div class="book-grid">
+      <aside class="book-info">
+        <h3>Talk to us directly</h3>
+        <p>Prefer to call? We answer 24/7 for emergencies.</p>
+        <div class="contact-row">
+          <span class="contact-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+          <div><div class="lbl">Call us</div><div class="val">(02) 8000 1234</div></div>
+        </div>
+        <div class="contact-row">
+          <span class="contact-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
+          <div><div class="lbl">Email us</div><div class="val">hello@aquafix.com.au</div></div>
+        </div>
+        <div class="contact-row">
+          <span class="contact-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <div><div class="lbl">Servicing</div><div class="val">All of Greater Sydney</div></div>
+        </div>
+        <div class="book-trust">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.7 8.95a1 1 0 0 1-.6.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+          Licensed, insured &amp; fully guaranteed work
+        </div>
+      </aside>
+
+      <div class="book-form">
+        <form id="bookForm" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label>Name <span class="req">*</span></label>
+              <input type="text" name="name" placeholder="Your full name" required>
+              <span class="err-msg">Please enter your name</span>
+            </div>
+            <div class="field">
+              <label>Phone <span class="req">*</span></label>
+              <input type="tel" name="phone" placeholder="04xx xxx xxx" required>
+              <span class="err-msg">Please enter a valid phone</span>
+            </div>
+            <div class="field full">
+              <label>Email <span class="req">*</span></label>
+              <input type="email" name="email" placeholder="you@email.com" required>
+              <span class="err-msg">Please enter a valid email</span>
+            </div>
+            <div class="field">
+              <label>Service Type</label>
+              <select name="service">
+                <option value="">Select a service…</option>
+                <option>Emergency Plumbing</option>
+                <option>Blocked Drains</option>
+                <option>Hot Water Systems</option>
+                <option>Leak Detection</option>
+                <option>Bathroom Renovations</option>
+                <option>Gas Fitting</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Preferred Date</label>
+              <input type="date" name="date">
+            </div>
+            <div class="field full">
+              <label>Message</label>
+              <textarea name="message" placeholder="Briefly describe the issue…"></textarea>
+            </div>
+            <div class="field full form-submit">
+              <button type="submit" class="btn btn-orange btn-lg">Request a Quote</button>
+            </div>
+          </div>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <h3>Request received!</h3>
+          <p>Thanks — one of our Sydney plumbers will call you back within the hour.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAP ============ -->
+<section class="section" id="area">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Service Area</span>
+      <h2>Where We Work</h2>
+      <p>We cover all of Greater Sydney and surrounding suburbs.</p>
+    </div>
+    <div class="map-wrap">
+      <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps?q=Sydney%20NSW%20Australia&z=10&output=embed"></iframe>
+    </div>
+    <div class="map-chips" id="mapChips"></div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="#top" class="brand">
+          <span class="brand-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c2.2 3 6 7 6 10.8a6 6 0 0 1-12 0C6 9.5 9.8 5.5 12 2.5z"/></svg></span>
+          AquaFix Plumbing
+        </a>
+        <p class="footer-tag">Sydney's reliable local plumbers. Licensed, insured and trusted to deliver quality workmanship.</p>
+        <div class="footer-contact">
+          <a href="tel:0280001234"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (02) 8000 1234</a>
+          <a href="mailto:hello@aquafix.com.au"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg> hello@aquafix.com.au</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Service Areas</h4>
+        <ul>
+          <li><a href="#area">Sydney CBD</a></li>
+          <li><a href="#area">Parramatta</a></li>
+          <li><a href="#area">Penrith</a></li>
+          <li><a href="#area">Liverpool</a></li>
+          <li><a href="#area">Hornsby</a></li>
+          <li><a href="#area">Sutherland</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">ABN 00 000 000 000</a></li>
+          <li><a href="#">NSW Licence L00000</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">© 2026 AquaFix Plumbing. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- floating WhatsApp --><a href="#" class="fab-wa" aria-label="WhatsApp us">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.477-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+</a>
+
+<!-- mobile sticky action bar -->
+<div class="mobile-bar">
+  <a href="#" class="mbtn mbtn-wa" aria-label="WhatsApp us">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.477-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+    WhatsApp
+  </a>
+  <a href="tel:0280001234" class="mbtn mbtn-call">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    Call Now
+  </a>
+</div>
+
+<script src="image-slot.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

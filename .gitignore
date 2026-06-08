@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+test-results/
+uploads/*.jpg
+uploads/*.png
+uploads/*.jpeg
+uploads/*.gif
+!uploads/.gitkeep
+Design Plumber/
+Plumber screenshot.png
