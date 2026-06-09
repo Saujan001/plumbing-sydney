@@ -69,7 +69,7 @@
   var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpya2F3ZXdwaHh2c2t3a3BzeXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MTA5NDUsImV4cCI6MjA5NjQ4Njk0NX0.720XSZ7kEIVm0o0_RC6N18MwL_1YrQ-8nZ7dt6b9wLs';
 
   /* redirect immediately if already logged in */
-  if(sessionStorage.getItem('adminToken')){ location.href = 'index.html'; }
+  if(localStorage.getItem('adminToken')){ location.href = 'index.html'; }
 
   document.getElementById('loginForm').addEventListener('submit', function(e){
     e.preventDefault();
@@ -98,9 +98,9 @@
       });
     })
     .then(function(data){
-      sessionStorage.setItem('adminToken', data.access_token);
-      sessionStorage.setItem('adminRefreshToken', data.refresh_token || '');
-      sessionStorage.setItem('adminUser', JSON.stringify(data.user || {}));
+      localStorage.setItem('adminToken', data.access_token);
+      localStorage.setItem('adminRefreshToken', data.refresh_token || '');
+      localStorage.setItem('adminUser', JSON.stringify(data.user || {}));
       btn.innerHTML = '<span class="spinner"></span>Redirecting…';
       location.href = 'index.html';
     })

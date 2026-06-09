@@ -1,7 +1,7 @@
 /* ============ AquaFix Admin — app ============ */
 
 /* ---------- auth guard — must be first ---------- */
-const adminToken = sessionStorage.getItem('adminToken');
+const adminToken = localStorage.getItem('adminToken');
 if (!adminToken) {
   window.location.href = 'login.html';
 }
@@ -14,7 +14,7 @@ async function deleteFromStorage(publicUrl) {
     const idx = publicUrl.indexOf(marker);
     if (idx === -1) return;
     const filePath = publicUrl.substring(idx + marker.length);
-    const token = sessionStorage.getItem('adminToken');
+    const token = localStorage.getItem('adminToken');
     await fetch(`${SUPABASE_URL}/storage/v1/object/uploads/${filePath}`, {
       method: 'DELETE',
       headers: {
@@ -140,7 +140,7 @@ async function uploadToStorage(file, folder) {
 
   /* ---------- logout ---------- */
   $('#logoutBtn').addEventListener('click', function(){
-    var token = sessionStorage.getItem('adminToken') || '';
+    var token = localStorage.getItem('adminToken') || '';
     fetch(supabaseAdmin.url + '/auth/v1/logout', {
       method: 'POST',
       headers: {
@@ -148,9 +148,9 @@ async function uploadToStorage(file, folder) {
         'Authorization': 'Bearer ' + token
       }
     }).finally(function(){
-      sessionStorage.removeItem('adminToken');
-      sessionStorage.removeItem('adminRefreshToken');
-      sessionStorage.removeItem('adminUser');
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminRefreshToken');
+      localStorage.removeItem('adminUser');
       location.replace('login.html');
     });
   });
@@ -1052,7 +1052,7 @@ async function uploadToStorage(file, folder) {
   document.addEventListener('DOMContentLoaded', function() {
     /* populate welcome name from stored session */
     try {
-      var adminUser = JSON.parse(sessionStorage.getItem('adminUser') || '{}');
+      var adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
       var displayName = adminUser.email ? adminUser.email.split('@')[0] : 'Admin';
       var welcomeEl = document.getElementById('adminWelcome');
       var welcomeDashEl = document.getElementById('adminWelcomeDash');

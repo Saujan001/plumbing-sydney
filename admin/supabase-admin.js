@@ -2,7 +2,7 @@
 const supabaseAdmin = {
   url: SUPABASE_URL,
   get headers() {
-    const token = sessionStorage.getItem('adminToken');
+    const token = localStorage.getItem('adminToken');
     return {
       'apikey': SUPABASE_ANON_KEY,
       'Authorization': `Bearer ${token}`,
