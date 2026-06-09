@@ -6,7 +6,27 @@ if (!adminToken) {
   window.location.href = 'login.html';
 }
 
-/* ---------- Supabase Storage upload ---------- */
+/* ---------- Supabase Storage helpers ---------- */
+async function deleteFromStorage(publicUrl) {
+  if (!publicUrl) return;
+  try {
+    const marker = '/object/public/uploads/';
+    const idx = publicUrl.indexOf(marker);
+    if (idx === -1) return;
+    const filePath = publicUrl.substring(idx + marker.length);
+    const token = sessionStorage.getItem('adminToken');
+    await fetch(`${SUPABASE_URL}/storage/v1/object/uploads/${filePath}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  } catch (e) {
+    console.warn('Could not delete old file from storage:', e);
+  }
+}
+
 async function uploadToStorage(file, folder) {
   const ext = file.name.split('.').pop();
   const filename = `${folder}/${Date.now()}.${ext}`;
@@ -630,6 +650,9 @@ async function uploadToStorage(file, folder) {
     var d = e.target.closest('[data-del-gal]');
     if(d){
       var id = d.dataset.delGal;
+      var row = liveGallery.find(function(g){ return String(g.id)===id; });
+      var photoUrl = row ? (row.url || '') : '';
+      deleteFromStorage(photoUrl);
       sbDelete('/rest/v1/gallery?id=eq.'+id)
         .then(function(){ liveGallery = liveGallery.filter(function(g){ return String(g.id)!==id; }); renderGallery(liveGallery); toast('Photo deleted'); })
         .catch(function(){ toast('Delete failed', true); });
@@ -752,20 +775,28 @@ async function uploadToStorage(file, folder) {
         var f = files[0]; if(!f) return;
 
         if(key === 'hero'){
-          uploadToStorage(f, 'hero').then(function(url){
-            return sbPatch('/rest/v1/settings?key=eq.hero_photo', {value: url}).then(function(){ return url; });
-          }).then(function(url){
-            showUploadPreview(zone, f, url);
-            toast('Hero photo updated!');
-          }).catch(function(){ toast('Hero upload failed', true); });
+          sbGet('/rest/v1/settings?key=eq.hero_photo&select=value')
+            .then(function(rows){ return rows && rows[0] ? rows[0].value : ''; })
+            .then(function(oldUrl){ return deleteFromStorage(oldUrl); })
+            .then(function(){ return uploadToStorage(f, 'hero'); })
+            .then(function(url){
+              return sbPatch('/rest/v1/settings?key=eq.hero_photo', {value: url}).then(function(){ return url; });
+            }).then(function(url){
+              showUploadPreview(zone, f, url);
+              toast('Hero photo updated!');
+            }).catch(function(){ toast('Hero upload failed', true); });
 
         } else if(key === 'logo'){
-          uploadToStorage(f, 'logo').then(function(url){
-            return sbPatch('/rest/v1/settings?key=eq.logo_url', {value: url}).then(function(){ return url; });
-          }).then(function(url){
-            showUploadPreview(zone, f, url);
-            toast('Logo updated!');
-          }).catch(function(){ toast('Logo upload failed', true); });
+          sbGet('/rest/v1/settings?key=eq.logo_url&select=value')
+            .then(function(rows){ return rows && rows[0] ? rows[0].value : ''; })
+            .then(function(oldUrl){ return deleteFromStorage(oldUrl); })
+            .then(function(){ return uploadToStorage(f, 'logo'); })
+            .then(function(url){
+              return sbPatch('/rest/v1/settings?key=eq.logo_url', {value: url}).then(function(){ return url; });
+            }).then(function(url){
+              showUploadPreview(zone, f, url);
+              toast('Logo updated!');
+            }).catch(function(){ toast('Logo upload failed', true); });
 
         } else {
           /* fallback for any other upload zones (favicon etc) — local preview only */
