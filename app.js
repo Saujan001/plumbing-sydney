@@ -487,9 +487,33 @@
       .catch(function(){});
   }
 
+  /* ---- 4. Load Services ---- */
+  function loadServices(){
+    if(typeof supabase === 'undefined') return;
+    fetch(supabase.url + '/rest/v1/services?select=*&order=sort_order.asc', { headers: supabase.headers })
+      .then(function(res){ return res.ok ? res.json() : []; })
+      .then(function(rows){
+        if(!rows || !rows.length) return; /* keep hardcoded cards if table is empty */
+        var grid = document.getElementById('svcGrid');
+        if(!grid) return;
+        grid.innerHTML = rows.map(function(s){
+          var iconName = s.icon || 'wrench';
+          var desc = s.description || s.desc || '';
+          return '<article class="svc-card">'
+            + '<div class="svc-ic">'+svg(iconName)+'</div>'
+            + '<h3>'+escHtml(s.title||'')+'</h3>'
+            + '<p>'+escHtml(desc)+'</p>'
+            + '<span class="more">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>'
+            + '</article>';
+        }).join('');
+      })
+      .catch(function(){}); /* silent — hardcoded cards remain on error */
+  }
+
   /* ---- kick off all Supabase fetches ---- */
   loadSettings();
   loadTestimonials();
   loadGallery();
+  loadServices();
 
 })();
