@@ -1,8 +1,11 @@
 /* ============ AquaFix Admin — app ============ */
 
 /* ---------- auth guard — must be first ---------- */
-var adminToken = sessionStorage.getItem('adminToken');
-if(!adminToken){ location.replace('login.html'); }
+const adminToken = sessionStorage.getItem('adminToken');
+console.log('Token on load:', adminToken ? adminToken.substring(0, 40) + '...' : 'NULL - REDIRECTING');
+if (!adminToken) {
+  window.location.href = 'login.html';
+}
 
 (function(){
   'use strict';
