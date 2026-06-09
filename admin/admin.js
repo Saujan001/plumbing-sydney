@@ -730,17 +730,18 @@ if (!adminToken) {
     });
   }
 
-})();
+  /* ---------- init ---------- */
+  document.addEventListener('DOMContentLoaded', function() {
+    renderGallery();
+    renderTags();
+    renderSocial();
+    initBranding();
+    initUploaders();
+    loadDashboard();
+    loadEnquiries();
+    loadSettings();
+    loadServices();
+    loadReviews();
+  });
 
-document.addEventListener('DOMContentLoaded', function() {
-  renderGallery();
-  renderTags();
-  renderSocial();
-  initBranding();
-  initUploaders();
-  loadDashboard();
-  loadEnquiries();
-  loadSettings();
-  loadServices();
-  loadReviews();
-});
+})();
