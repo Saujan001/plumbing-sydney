@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="announcement-bar" id="announcementBar" style="display:none;background:var(--navy);color:#fff;text-align:center;font-size:13.5px;font-weight:600;padding:9px 16px" id="announcementBar"></div>
 
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
@@ -73,7 +74,7 @@
     <!-- left: form card -->
     <div class="hero-card">
       <div id="heroFormWrap">
-        <h1>The Same-Day <span class="text-orange">Plumbing</span> Service</h1>
+        <h1 id="heroHeading">The Same-Day <span class="text-orange">Plumbing</span> Service</h1>
         <div class="hero-rating">
           <span class="stars" data-stars="5"></span>
           <span class="score">4.9</span>
@@ -130,9 +131,9 @@
     <!-- right: team photo -->
     <div class="hero-photo">
       <image-slot id="hero-photo" shape="rect" fit="cover" placeholder="Drop your team photo"></image-slot>
-      <div class="hero-offer">
+      <div class="hero-offer" id="heroBadge">
         <span class="tag">Our Offering!</span>
-        <div class="box">$0 Call-Out<br>Fee</div>
+        <div class="box" id="heroBadgeBox">$0 Call-Out<br>Fee</div>
       </div>
     </div>
 
@@ -343,7 +344,7 @@
       </div>
       <div class="footer-col">
         <h4>Service Areas</h4>
-        <ul>
+        <ul id="footerAreas">
           <li><a href="#area">Sydney CBD</a></li>
           <li><a href="#area">Parramatta</a></li>
           <li><a href="#area">Penrith</a></li>
@@ -355,8 +356,8 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="#">ABN 00 000 000 000</a></li>
-          <li><a href="#">NSW Licence L00000</a></li>
+          <li id="footerAbn"><a href="#">ABN 00 000 000 000</a></li>
+          <li id="footerLicence"><a href="#">NSW Licence L00000</a></li>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Service</a></li>
         </ul>

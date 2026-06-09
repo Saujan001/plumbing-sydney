@@ -353,6 +353,8 @@
   function escHtml(s){
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+  function setText(sel, val){ document.querySelectorAll(sel).forEach(function(el){ el.textContent = val; }); }
+  function setAttr(sel, attr, val){ document.querySelectorAll(sel).forEach(function(el){ el[attr] = val; }); }
 
   /* ---- 1. Load Settings ---- */
   function loadSettings(){
@@ -364,35 +366,32 @@
         var cfg = {};
         rows.forEach(function(r){ cfg[r.key] = r.value; });
 
+        /* --- business identity --- */
         if(cfg.business_name){
           document.title = cfg.business_name + ' — Your Trusted Local Plumber in Sydney';
-          document.querySelectorAll('.business-name').forEach(function(el){ el.textContent = cfg.business_name; });
+          setText('.business-name', cfg.business_name);
         }
-
         if(cfg.phone){
           var rawPhone = cfg.phone.replace(/\D/g,'');
-          document.querySelectorAll('.phone-number').forEach(function(el){ el.textContent = cfg.phone; });
+          setText('.phone-number', cfg.phone);
           document.querySelectorAll('a[href^="tel:"]').forEach(function(a){
             a.href = 'tel:' + rawPhone;
-            /* update visible text only if it looks like a phone number */
             if(/^[\d\s()+\-]+$/.test(a.textContent.trim())) a.textContent = cfg.phone;
           });
         }
-
         if(cfg.email){
-          document.querySelectorAll('.contact-email').forEach(function(el){ el.textContent = cfg.email; });
+          setText('.contact-email', cfg.email);
           document.querySelectorAll('a[href^="mailto:"]').forEach(function(a){
             a.href = 'mailto:' + cfg.email;
             if(a.textContent.includes('@')) a.textContent = cfg.email;
           });
         }
-
         if(cfg.whatsapp){
           var waNum = cfg.whatsapp.replace(/\D/g,'');
-          var waUrl = 'https://wa.me/' + waNum;
-          document.querySelectorAll('.fab-wa, .mbtn-wa').forEach(function(a){ a.href = waUrl; });
+          setAttr('.fab-wa, .mbtn-wa', 'href', 'https://wa.me/' + waNum);
         }
 
+        /* --- hero photo & logo --- */
         if(cfg.hero_photo && cfg.hero_photo.trim()){
           var heroSlot = document.querySelector('#hero-photo');
           if(heroSlot){
@@ -403,11 +402,82 @@
             heroSlot.replaceWith(heroImg);
           }
         }
-
         if(cfg.logo_url && cfg.logo_url.trim()){
           document.querySelectorAll('.brand-mark').forEach(function(el){
-            el.innerHTML = '<img src="'+cfg.logo_url+'" alt="Logo" style="width:100%;height:100%;object-fit:contain">';
+            el.innerHTML = '<img src="'+escHtml(cfg.logo_url)+'" alt="Logo" style="width:100%;height:100%;object-fit:contain">';
           });
+        }
+
+        /* --- hero heading & badge --- */
+        if(cfg.hero_heading){
+          var h1 = document.getElementById('heroHeading');
+          if(h1) h1.textContent = cfg.hero_heading;
+        }
+        if(cfg.hero_badge_text){
+          var badgeBox = document.getElementById('heroBadgeBox');
+          if(badgeBox) badgeBox.textContent = cfg.hero_badge_text;
+        }
+        var badge = document.getElementById('heroBadge');
+        if(badge){
+          badge.style.display = (cfg.hero_badge_visible === 'false') ? 'none' : '';
+        }
+        if(cfg.hero_star_rating){
+          var scoreEl = document.querySelector('.score');
+          if(scoreEl) scoreEl.textContent = cfg.hero_star_rating;
+        }
+
+        /* --- hero trust checkpoints --- */
+        var heroCheckEls = document.querySelectorAll('#heroChecks li');
+        ['hero_trust_1','hero_trust_2','hero_trust_3','hero_trust_4'].forEach(function(key, i){
+          if(cfg[key] && heroCheckEls[i]){
+            heroCheckEls[i].lastChild.textContent = cfg[key];
+          }
+        });
+
+        /* --- hero strip items --- */
+        var stripEls = document.querySelectorAll('#heroStrip .item');
+        ['hero_strip_1','hero_strip_2','hero_strip_3','hero_strip_4','hero_strip_5','hero_strip_6'].forEach(function(key, i){
+          if(cfg[key] && stripEls[i]){
+            /* last text node — keep the svg icon, replace only trailing text */
+            var nodes = stripEls[i].childNodes;
+            var last = nodes[nodes.length - 1];
+            if(last && last.nodeType === 3) last.textContent = cfg[key];
+          }
+        });
+
+        /* --- footer --- */
+        if(cfg.footer_tagline) setText('.footer-tag', cfg.footer_tagline);
+        if(cfg.abn){
+          var abnEl = document.getElementById('footerAbn');
+          if(abnEl) abnEl.innerHTML = '<a href="#">ABN '+escHtml(cfg.abn)+'</a>';
+        }
+        if(cfg.licence){
+          var licEl = document.getElementById('footerLicence');
+          if(licEl) licEl.innerHTML = '<a href="#">'+escHtml(cfg.licence)+'</a>';
+        }
+
+        /* --- google maps --- */
+        if(cfg.google_maps_url){
+          var iframe = document.querySelector('.map-wrap iframe');
+          if(iframe) iframe.src = cfg.google_maps_url;
+        }
+
+        /* --- colour palette (CSS vars) --- */
+        var root = document.documentElement;
+        if(cfg.colour_primary) root.style.setProperty('--navy', cfg.colour_primary);
+        if(cfg.colour_accent)  root.style.setProperty('--orange', cfg.colour_accent);
+        if(cfg.colour_bg)      root.style.setProperty('--bg', cfg.colour_bg);
+        if(cfg.colour_text)    root.style.setProperty('--ink', cfg.colour_text);
+
+        /* --- announcement bar --- */
+        var bar = document.getElementById('announcementBar');
+        if(bar){
+          if(cfg.announcement_on === 'true' && cfg.announcement && cfg.announcement.trim()){
+            bar.textContent = cfg.announcement;
+            bar.style.display = '';
+          } else {
+            bar.style.display = 'none';
+          }
         }
       })
       .catch(function(){}); /* silent — hardcoded values remain */
@@ -420,7 +490,6 @@
       .then(function(res){ return res.ok ? res.json() : []; })
       .then(function(rows){
         if(rows && rows.length) renderRevTrack(rows);
-        /* else fallback already rendered */
       })
       .catch(function(){});
   }
@@ -431,28 +500,19 @@
     fetch(supabase.url + '/rest/v1/gallery?select=*&order=sort_order.asc', { headers: supabase.headers })
       .then(function(res){ return res.ok ? res.json() : []; })
       .then(function(rows){
-        if(!rows || !rows.length) return; /* keep image-slot placeholders */
-
-        /* Split into pages of 6 */
+        if(!rows || !rows.length) return;
         var pages = [];
         for(var i=0;i<rows.length;i+=6) pages.push(rows.slice(i,i+6));
-
-        /* Heights to cycle through for visual variety */
         var heights = [300,230,240,300,250,220];
-
         var galSection = document.getElementById('gallery');
-        /* Remove existing gallery-pages */
         galSection.querySelectorAll('.gallery-page').forEach(function(el){ el.remove(); });
-
         var dotsWrap = document.getElementById('galleryDots');
         dotsWrap.innerHTML = '';
-
         var wrap = galSection.querySelector('.wrap');
         pages.forEach(function(pageRows, pi){
           var pageEl = document.createElement('div');
           pageEl.className = 'gallery-page' + (pi===0?' active':'');
           pageEl.dataset.page = pi;
-
           var masonry = document.createElement('div');
           masonry.className = 'masonry';
           pageRows.forEach(function(row, ri){
@@ -466,16 +526,12 @@
           });
           pageEl.appendChild(masonry);
           wrap.insertBefore(pageEl, dotsWrap);
-
-          /* dot button */
           var dotBtn = document.createElement('button');
           dotBtn.dataset.go = pi;
           dotBtn.setAttribute('aria-label','Page '+(pi+1));
           if(pi===0) dotBtn.className = 'active';
           dotsWrap.appendChild(dotBtn);
         });
-
-        /* re-bind dot clicks now that they're rebuilt */
         dotsWrap.querySelectorAll('button').forEach(function(btn){
           btn.addEventListener('click', function(){
             var idx = parseInt(btn.dataset.go,10);
@@ -487,27 +543,77 @@
       .catch(function(){});
   }
 
-  /* ---- 4. Load Services ---- */
+  /* ---- 4. Load Services & update dropdowns ---- */
   function loadServices(){
     if(typeof supabase === 'undefined') return;
     fetch(supabase.url + '/rest/v1/services?select=*&order=sort_order.asc', { headers: supabase.headers })
       .then(function(res){ return res.ok ? res.json() : []; })
       .then(function(rows){
-        if(!rows || !rows.length) return; /* keep hardcoded cards if table is empty */
+        if(!rows || !rows.length) return;
         var grid = document.getElementById('svcGrid');
+        if(grid){
+          grid.innerHTML = rows.map(function(s){
+            var iconName = s.icon || 'wrench';
+            var desc = s.description || s.desc || '';
+            return '<article class="svc-card">'
+              + '<div class="svc-ic">'+svg(iconName)+'</div>'
+              + '<h3>'+escHtml(s.title||'')+'</h3>'
+              + '<p>'+escHtml(desc)+'</p>'
+              + '<span class="more">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>'
+              + '</article>';
+          }).join('');
+        }
+        /* sync both service dropdowns */
+        var opts = '<option value="">Select a service…</option>'
+          + rows.map(function(s){ return '<option value="'+escHtml(s.title||'')+'">'+escHtml(s.title||'')+'</option>'; }).join('');
+        document.querySelectorAll('select[name="service"]').forEach(function(sel){ sel.innerHTML = opts; });
+      })
+      .catch(function(){});
+  }
+
+  /* ---- 5. Load Why Us ---- */
+  function loadWhyUs(){
+    if(typeof supabase === 'undefined') return;
+    fetch(supabase.url + '/rest/v1/why_us?select=*&order=sort_order.asc', { headers: supabase.headers })
+      .then(function(res){ return res.ok ? res.json() : []; })
+      .then(function(rows){
+        if(!rows || !rows.length) return;
+        var grid = document.getElementById('whyGrid');
         if(!grid) return;
-        grid.innerHTML = rows.map(function(s){
-          var iconName = s.icon || 'wrench';
-          var desc = s.description || s.desc || '';
-          return '<article class="svc-card">'
-            + '<div class="svc-ic">'+svg(iconName)+'</div>'
-            + '<h3>'+escHtml(s.title||'')+'</h3>'
+        grid.innerHTML = rows.map(function(w){
+          var iconName = w.icon || 'shield';
+          var desc = w.description || w.desc || '';
+          return '<article class="why-card">'
+            + '<div class="why-ic">'+svg(iconName)+'</div>'
+            + '<h3>'+escHtml(w.title||'')+'</h3>'
             + '<p>'+escHtml(desc)+'</p>'
-            + '<span class="more">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>'
             + '</article>';
         }).join('');
       })
-      .catch(function(){}); /* silent — hardcoded cards remain on error */
+      .catch(function(){});
+  }
+
+  /* ---- 6. Load Service Areas ---- */
+  function loadServiceAreas(){
+    if(typeof supabase === 'undefined') return;
+    fetch(supabase.url + '/rest/v1/service_areas?select=*&order=sort_order.asc', { headers: supabase.headers })
+      .then(function(res){ return res.ok ? res.json() : []; })
+      .then(function(rows){
+        if(!rows || !rows.length) return;
+        var chips = document.getElementById('mapChips');
+        if(chips){
+          chips.innerHTML = rows.map(function(a){
+            return '<span class="map-chip">'+svg('pin')+escHtml(a.name)+'</span>';
+          }).join('');
+        }
+        var footerAreas = document.getElementById('footerAreas');
+        if(footerAreas){
+          footerAreas.innerHTML = rows.map(function(a){
+            return '<li><a href="#area">'+escHtml(a.name)+'</a></li>';
+          }).join('');
+        }
+      })
+      .catch(function(){});
   }
 
   /* ---- kick off all Supabase fetches ---- */
@@ -515,5 +621,7 @@
   loadTestimonials();
   loadGallery();
   loadServices();
+  loadWhyUs();
+  loadServiceAreas();
 
 })();

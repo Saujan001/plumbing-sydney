@@ -1,4 +1,5 @@
 /* ============ AquaFix Plumbing — styles ============ */
+.announcement-bar{background:var(--navy);color:#fff;text-align:center;font-size:13.5px;font-weight:600;padding:9px 16px;letter-spacing:.01em}
 :root{
   --navy:#1B2A4A;
   --navy-2:#16223C;
