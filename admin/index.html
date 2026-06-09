@@ -27,10 +27,12 @@
       <button class="sb-item" data-nav="branding"></button>
       <button class="sb-item" data-nav="hero"></button>
       <button class="sb-item" data-nav="services"></button>
+      <button class="sb-item" data-nav="whyus"></button>
       <button class="sb-item" data-nav="gallery"></button>
       <button class="sb-item" data-nav="testimonials"></button>
       <div class="sb-label">Configuration</div>
       <button class="sb-item" data-nav="contact"></button>
+      <button class="sb-item" data-nav="serviceareas"></button>
       <button class="sb-item" data-nav="social"></button>
       <button class="sb-item" data-nav="enquiries"></button>
     </nav>
@@ -53,10 +55,10 @@
         <a class="btn btn-ghost btn-sm" href="../index.html" target="_blank" rel="noopener" id="topPreview"></a>
         <div class="admin-user">
           <div class="meta" style="text-align:right">
-            <div class="nm">Dave Mitchell</div>
+            <div class="nm" id="adminWelcome">Admin</div>
             <div class="rl">Owner · Admin</div>
           </div>
-          <div class="av">DM</div>
+          <div class="av" id="adminAvatar">?</div>
         </div>
       </div>
     </header>
@@ -66,7 +68,7 @@
       <!-- ===== DASHBOARD ===== -->
       <section class="panel active" data-panel="dashboard">
         <div class="panel-head">
-          <h2>Welcome back, Dave 👋</h2>
+          <h2>Welcome back, <span id="adminWelcomeDash">Admin</span> 👋</h2>
           <p>Here's what's happening with AquaFix Plumbing this week.</p>
         </div>
         <div class="stat-grid" id="statGrid"></div>
@@ -89,24 +91,24 @@
         <div class="panel-head"><h2>Site Settings</h2><p>Core business details shown across your website.</p></div>
         <div class="card card-pad">
           <div class="form-grid">
-            <div class="field"><label>Business Name</label><input type="text" value="AquaFix Plumbing"></div>
-            <div class="field"><label>Tagline</label><input type="text" value="Your Trusted Local Plumber in Sydney"></div>
-            <div class="field"><label>ABN</label><input type="text" value="00 000 000 000"></div>
-            <div class="field"><label>Licence Number</label><input type="text" value="NSW L00000"></div>
+            <div class="field"><label>Business Name</label><input id="settingsBusinessName" type="text" value="AquaFix Plumbing"></div>
+            <div class="field"><label>Tagline</label><input id="settingsTagline" type="text" value="Your Trusted Local Plumber in Sydney"></div>
+            <div class="field"><label>ABN</label><input id="settingsAbn" type="text" value="00 000 000 000"></div>
+            <div class="field"><label>Licence Number</label><input id="settingsLicence" type="text" value="NSW L00000"></div>
             <div class="field full">
               <label>Announcement Bar Text</label>
-              <input type="text" value="⚡ Same-day service available — call before 2pm!">
+              <input id="settingsAnnouncement" type="text" value="⚡ Same-day service available — call before 2pm!">
               <span class="hint">Shows as a scrolling bar at the very top of the site.</span>
             </div>
           </div>
           <div class="toggle-row" style="margin-top:6px">
             <div class="tr-info"><h4>Show announcement bar</h4><p>Toggle the top banner on or off.</p></div>
-            <label class="switch"><input type="checkbox" checked><span class="track"></span></label>
+            <label class="switch"><input id="settingsAnnouncementOn" type="checkbox" checked><span class="track"></span></label>
           </div>
           <div class="save-bar">
             <span class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All changes saved automatically as draft</span>
-            <button class="btn btn-ghost">Discard</button>
-            <button class="btn btn-orange" data-save>Save Changes</button>
+            <button class="btn btn-ghost" id="settingsDiscard2">Discard</button>
+            <button class="btn btn-orange" id="settingsSave2">Save Changes</button>
           </div>
         </div>
       </section>
@@ -150,8 +152,8 @@
             <div class="font-sample" id="fontSample">AquaFix Plumbing — Sydney</div>
           </div>
           <div class="save-bar">
-            <button class="btn btn-ghost">Reset</button>
-            <button class="btn btn-orange" data-save>Save Changes</button>
+            <button class="btn btn-ghost" id="brandingReset">Reset</button>
+            <button class="btn btn-orange" id="brandingSave">Save Changes</button>
           </div>
         </div>
       </section>
@@ -161,8 +163,8 @@
         <div class="panel-head"><h2>Hero Section</h2><p>The first thing visitors see at the top of your homepage.</p></div>
         <div class="card card-pad">
           <div class="form-grid">
-            <div class="field full"><label>Hero Heading</label><input type="text" value="The Same-Day Plumbing Service"></div>
-            <div class="field full"><label>Hero Subheading</label><textarea>Fast, friendly and fully licensed. From burst pipes to bathroom renos — same day service, upfront pricing, and workmanship you can trust.</textarea></div>
+            <div class="field full"><label>Hero Heading</label><input id="heroHeadingInput" type="text" value="The Same-Day Plumbing Service"></div>
+            <div class="field full"><label>Hero Subheading</label><textarea id="heroSubheadingInput">Fast, friendly and fully licensed. From burst pipes to bathroom renos — same day service, upfront pricing, and workmanship you can trust.</textarea></div>
           </div>
           <div style="margin:18px 0">
             <label style="font-size:12.5px;font-weight:700;color:var(--navy);display:block;margin-bottom:8px">Hero / Team Photo</label>
@@ -174,24 +176,24 @@
           </div>
           <div class="toggle-row">
             <div class="tr-info"><h4>Show "$0 Call-Out" badge</h4><p>The angled orange badge on the hero photo.</p></div>
-            <label class="switch"><input type="checkbox" checked><span class="track"></span></label>
+            <label class="switch"><input id="heroBadgeToggle" type="checkbox" checked><span class="track"></span></label>
           </div>
           <div class="form-grid" style="margin-top:18px">
-            <div class="field"><label>Badge Text</label><input type="text" value="$0 Call-Out Fee"></div>
-            <div class="field"><label>Star Rating</label><input type="number" min="1" max="5" step="0.1" value="4.9"></div>
-            <div class="field"><label>Review Count</label><input type="number" min="0" value="300"></div>
+            <div class="field"><label>Badge Text</label><input id="heroBadgeTextInput" type="text" value="$0 Call-Out Fee"></div>
+            <div class="field"><label>Star Rating</label><input id="heroStarRatingInput" type="number" min="1" max="5" step="0.1" value="4.9"></div>
+            <div class="field"><label>Review Count</label><input id="heroReviewCountInput" type="number" min="0" value="300"></div>
           </div>
           <h3 style="font-size:15px;margin:24px 0 4px">Trust Checkpoints</h3>
           <p style="font-size:13px;color:var(--muted);margin-bottom:14px">The four ticked features beside the form.</p>
           <div class="form-grid">
-            <div class="field"><input type="text" value="$0 Call-Out"></div>
-            <div class="field"><input type="text" value="Same Day Service"></div>
-            <div class="field"><input type="text" value="Upfront Pricing"></div>
-            <div class="field"><input type="text" value="Licensed &amp; Insured"></div>
+            <div class="field"><input id="heroTrust1" type="text" value="$0 Call-Out"></div>
+            <div class="field"><input id="heroTrust2" type="text" value="Same Day Service"></div>
+            <div class="field"><input id="heroTrust3" type="text" value="Upfront Pricing"></div>
+            <div class="field"><input id="heroTrust4" type="text" value="Licensed &amp; Insured"></div>
           </div>
           <div class="save-bar">
-            <button class="btn btn-ghost">Discard</button>
-            <button class="btn btn-orange" data-save>Save Changes</button>
+            <button class="btn btn-ghost" id="heroDiscard">Discard</button>
+            <button class="btn btn-orange" id="heroSave">Save Changes</button>
           </div>
         </div>
       </section>
@@ -233,19 +235,19 @@
         <div class="panel-head"><h2>Contact Details</h2><p>Phone, email and where you appear on the map.</p></div>
         <div class="card card-pad">
           <div class="form-grid">
-            <div class="field"><label>Phone Number</label><input type="tel" value="(02) 8000 1234"></div>
-            <div class="field"><label>Email Address</label><input type="email" value="hello@aquafix.com.au"></div>
-            <div class="field full"><label>Physical Address</label><input type="text" value="Unit 4, 22 Harbour St, Sydney NSW 2000"></div>
+            <div class="field"><label>Phone Number</label><input id="contactPhone" type="tel" value="(02) 8000 1234"></div>
+            <div class="field"><label>Email Address</label><input id="contactEmail" type="email" value="hello@aquafix.com.au"></div>
+            <div class="field full"><label>Physical Address</label><input id="contactAddress" type="text" value="Unit 4, 22 Harbour St, Sydney NSW 2000"></div>
             <div class="field full">
               <label>Service Areas</label>
               <div class="taginput" id="areaTags"><input type="text" placeholder="Type a suburb and press Enter…"></div>
               <span class="hint">Press Enter or comma to add. These appear as chips under the map.</span>
             </div>
-            <div class="field full"><label>Google Maps Embed URL</label><input type="url" value="https://www.google.com/maps?q=Sydney%20NSW&output=embed"></div>
+            <div class="field full"><label>Google Maps Embed URL</label><input id="contactMapsUrl" type="url" value="https://www.google.com/maps?q=Sydney%20NSW&output=embed"></div>
           </div>
           <div class="save-bar">
-            <button class="btn btn-ghost">Discard</button>
-            <button class="btn btn-orange" data-save>Save Changes</button>
+            <button class="btn btn-ghost" id="contactDiscard">Discard</button>
+            <button class="btn btn-orange" id="contactSave">Save Changes</button>
           </div>
         </div>
       </section>
@@ -254,6 +256,30 @@
       <section class="panel" data-panel="social">
         <div class="panel-head"><h2>Social Media Links</h2><p>Toggle each platform on and add its link.</p></div>
         <div class="card card-pad" id="socialCard"></div>
+      </section>
+
+      <!-- ===== WHY US ===== -->
+      <section class="panel" data-panel="whyus">
+        <div class="panel-head"><h2>Why Choose Us</h2><p>The 4 trust pillars on the homepage. Drag to reorder.</p></div>
+        <div class="card">
+          <div class="card-head">
+            <div><h3>Why Us Items</h3><p id="whyCount"></p></div>
+            <button class="btn btn-orange btn-sm" id="addWhyUs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Item</button>
+          </div>
+          <div class="list" id="whyList"></div>
+        </div>
+      </section>
+
+      <!-- ===== SERVICE AREAS ===== -->
+      <section class="panel" data-panel="serviceareas">
+        <div class="panel-head"><h2>Service Areas</h2><p>Suburbs shown under the map and in the footer. Drag to reorder.</p></div>
+        <div class="card card-pad">
+          <div style="display:flex;gap:10px;margin-bottom:18px">
+            <input id="newAreaInput" type="text" placeholder="Add a suburb…" style="flex:1;border:1.5px solid var(--line);border-radius:9px;padding:10px 13px;font-size:14px;font-family:inherit">
+            <button class="btn btn-orange" id="addAreaBtn">Add</button>
+          </div>
+          <div class="list" id="areaList"></div>
+        </div>
       </section>
 
       <!-- ===== ENQUIRIES ===== -->

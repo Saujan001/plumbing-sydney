@@ -91,9 +91,11 @@ async function uploadToStorage(file, folder) {
     branding:{icon:'palette', label:'Branding & Logo', title:'Branding & Logo'},
     hero:{icon:'layout', label:'Hero Section', title:'Hero Section'},
     services:{icon:'wrench', label:'Services', title:'Services'},
+    whyus:{icon:'shield', label:'Why Choose Us', title:'Why Choose Us'},
     gallery:{icon:'camera', label:'Gallery', title:'Gallery'},
     testimonials:{icon:'star', label:'Testimonials', title:'Testimonials'},
     contact:{icon:'phone', label:'Contact Details', title:'Contact Details'},
+    serviceareas:{icon:'pin', label:'Service Areas', title:'Service Areas'},
     social:{icon:'share', label:'Social Media', title:'Social Media'},
     enquiries:{icon:'inbox', label:'Enquiries Inbox', title:'Enquiries Inbox'}
   };
@@ -660,7 +662,7 @@ async function uploadToStorage(file, folder) {
   });
 
   /* =========================================================
-     CONTACT — tag input (unchanged)
+     CONTACT — tag input + save
   ========================================================= */
   var areas = ['Sydney CBD','Parramatta','Penrith','Liverpool','Hornsby','Sutherland'];
   function renderTags(){
@@ -681,8 +683,26 @@ async function uploadToStorage(file, folder) {
     var b=e.target.closest('[data-tag]'); if(b){ areas.splice(+b.dataset.tag,1); renderTags(); }
   });
 
+  $('#contactSave').addEventListener('click', function(){
+    var saves = [
+      sbPatch('/rest/v1/settings?key=eq.phone',          {value: $('#contactPhone').value.trim()}),
+      sbPatch('/rest/v1/settings?key=eq.email',          {value: $('#contactEmail').value.trim()}),
+      sbPatch('/rest/v1/settings?key=eq.address',        {value: $('#contactAddress').value.trim()}),
+      sbPatch('/rest/v1/settings?key=eq.google_maps_url',{value: $('#contactMapsUrl').value.trim()})
+    ];
+    // Replace all service_areas rows
+    var areasSave = sbDelete('/rest/v1/service_areas?sort_order=gte.0').then(function(){
+      if(!areas.length) return;
+      return sbPost('/rest/v1/service_areas', areas.map(function(name, i){ return {name:name, sort_order:i+1}; }));
+    });
+    saves.push(areasSave);
+    Promise.all(saves)
+      .then(function(){ toast('Contact details saved!'); })
+      .catch(function(){ toast('Save failed', true); });
+  });
+
   /* =========================================================
-     SOCIAL (unchanged)
+     SOCIAL — with save
   ========================================================= */
   var SOCIAL = [
     {key:'facebook', label:'Facebook', icon:'share', ph:'https://facebook.com/aquafix', val:'https://facebook.com/aquafixplumbing', on:true},
@@ -699,17 +719,206 @@ async function uploadToStorage(file, folder) {
         + '</div>'
         + '<label class="switch"><input type="checkbox" data-social="'+s.key+'" '+(s.on?'checked':'')+'><span class="track"></span></label>'
         + '</div>'
-        + '<div class="field" style="padding:4px 0 16px;border-bottom:1px solid var(--line-2)"><input type="url" value="'+esc(s.val)+'" placeholder="'+s.ph+'" '+(s.on?'':'disabled style="opacity:.5"')+'></div>';
+        + '<div class="field" style="padding:4px 0 16px;border-bottom:1px solid var(--line-2)">'
+        +   '<input type="url" data-social-url="'+s.key+'" value="'+esc(s.val)+'" placeholder="'+s.ph+'" '+(s.on?'':'disabled style="opacity:.5"')+'>'
+        + '</div>';
     }).join('');
-    $('#socialCard').innerHTML = html + '<div class="save-bar"><button class="btn btn-ghost">Discard</button><button class="btn btn-orange" data-save>Save Changes</button></div>';
+    $('#socialCard').innerHTML = html + '<div class="save-bar"><button class="btn btn-ghost" id="socialDiscard">Discard</button><button class="btn btn-orange" id="socialSave">Save Changes</button></div>';
     $('#socialCard').addEventListener('change', function(e){
       var c = e.target.closest('[data-social]'); if(!c) return;
       var s = SOCIAL.find(function(x){return x.key===c.dataset.social;}); s.on=c.checked; renderSocial();
     }, {once:true});
+    $('#socialSave').addEventListener('click', function(){
+      var urlInputs = $all('[data-social-url]');
+      urlInputs.forEach(function(inp){ var s = SOCIAL.find(function(x){return x.key===inp.dataset.socialUrl;}); if(s) s.val=inp.value.trim(); });
+      var saves = SOCIAL.map(function(s){
+        return sbPatch('/rest/v1/settings?key=eq.'+s.key, {value: s.val});
+      });
+      Promise.all(saves)
+        .then(function(){ toast('Social links saved!'); })
+        .catch(function(){ toast('Save failed', true); });
+    });
   }
-  // generic save buttons (branding / hero / contact panels still use these)
+
+  /* =========================================================
+     HERO PANEL — save
+  ========================================================= */
+  function initHeroSave(){
+    $('#heroSave').addEventListener('click', function(){
+      var badge = $('#heroBadgeToggle') ? $('#heroBadgeToggle').checked : true;
+      var saves = [
+        sbPatch('/rest/v1/settings?key=eq.hero_heading',       {value: $('#heroHeadingInput').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.hero_subheading',    {value: $('#heroSubheadingInput').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.hero_badge_text',    {value: $('#heroBadgeTextInput').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.hero_badge_visible', {value: badge ? 'true' : 'false'}),
+        sbPatch('/rest/v1/settings?key=eq.hero_star_rating',   {value: $('#heroStarRatingInput').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.hero_review_count',  {value: $('#heroReviewCountInput').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.hero_trust_1',       {value: $('#heroTrust1').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.hero_trust_2',       {value: $('#heroTrust2').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.hero_trust_3',       {value: $('#heroTrust3').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.hero_trust_4',       {value: $('#heroTrust4').value.trim()})
+      ];
+      Promise.all(saves)
+        .then(function(){ toast('Hero section saved!'); })
+        .catch(function(){ toast('Save failed', true); });
+    });
+  }
+
+  /* =========================================================
+     SETTINGS PANEL — save (site settings)
+  ========================================================= */
+  function initSettingsSave(){
+    $('#settingsSave2').addEventListener('click', function(){
+      var annOn = $('#settingsAnnouncementOn') ? $('#settingsAnnouncementOn').checked : false;
+      var saves = [
+        sbPatch('/rest/v1/settings?key=eq.business_name',   {value: $('#settingsBusinessName').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.tagline',         {value: $('#settingsTagline').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.abn',             {value: $('#settingsAbn').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.licence',         {value: $('#settingsLicence').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.announcement',    {value: $('#settingsAnnouncement').value.trim()}),
+        sbPatch('/rest/v1/settings?key=eq.announcement_on', {value: annOn ? 'true' : 'false'})
+      ];
+      Promise.all(saves)
+        .then(function(){ toast('Settings saved!'); loadSettings(); })
+        .catch(function(){ toast('Save failed', true); });
+    });
+  }
+
+  /* =========================================================
+     BRANDING — colour save
+  ========================================================= */
+  function initBrandingSave(){
+    $('#brandingSave').addEventListener('click', function(){
+      var saves = [
+        sbPatch('/rest/v1/settings?key=eq.colour_primary', {value: ($('[data-color="primary"]')||{}).value||''}),
+        sbPatch('/rest/v1/settings?key=eq.colour_accent',  {value: ($('[data-color="accent"]')||{}).value||''}),
+        sbPatch('/rest/v1/settings?key=eq.colour_bg',      {value: ($('[data-color="bg"]')||{}).value||''}),
+        sbPatch('/rest/v1/settings?key=eq.colour_text',    {value: ($('[data-color="text"]')||{}).value||''})
+      ];
+      Promise.all(saves)
+        .then(function(){ toast('Brand colours saved!'); })
+        .catch(function(){ toast('Save failed', true); });
+    });
+  }
+
+  /* =========================================================
+     WHY US — CRUD
+  ========================================================= */
+  var liveWhyUs = [];
+
+  function renderWhyUs(rows){
+    liveWhyUs = rows || [];
+    var list = $('#whyList');
+    list.innerHTML = rows.map(function(w){
+      var desc = w.description || w.desc || '';
+      return '<div class="list-row" draggable="true" data-id="'+w.id+'">'
+        + '<span class="drag-handle">'+ic('drag',2)+'</span>'
+        + '<span class="list-ic">'+ic(w.icon||'shield')+'</span>'
+        + '<div class="list-main"><h4>'+esc(w.title||'')+'</h4><p>'+esc(desc)+'</p></div>'
+        + '<div class="list-actions">'
+        +   '<button class="btn btn-ghost btn-icon" data-edit-why="'+w.id+'">'+ic('edit',2)+'</button>'
+        +   '<button class="btn btn-danger-soft btn-icon" data-del-why="'+w.id+'">'+ic('trash',2)+'</button>'
+        + '</div></div>';
+    }).join('');
+    $('#whyCount').textContent = rows.length + ' items';
+    makeSortable(list, '.list-row', function(order){
+      var patches = order.map(function(id, idx){
+        return sbPatch('/rest/v1/why_us?id=eq.'+id, {sort_order: idx+1});
+      });
+      Promise.all(patches).then(function(){ toast('Order saved'); }).catch(function(){ toast('Order save failed', true); });
+    });
+  }
+
+  function loadWhyUsAdmin(){
+    sbGet('/rest/v1/why_us?select=*&order=sort_order.asc')
+      .then(function(rows){ renderWhyUs(rows||[]); })
+      .catch(function(){ renderWhyUs([]); });
+  }
+
   document.addEventListener('click', function(e){
-    if(e.target.closest('[data-save]') && !e.target.closest('#socialCard')) toast('Changes saved successfully');
+    var ed = e.target.closest('[data-edit-why]');
+    var dl = e.target.closest('[data-del-why]');
+    if(ed){
+      var item = liveWhyUs.find(function(w){ return String(w.id)===ed.dataset.editWhy; });
+      if(item) openWhyModal(item);
+    }
+    if(dl){
+      var id = dl.dataset.delWhy;
+      if(!confirm('Delete this item?')) return;
+      sbDelete('/rest/v1/why_us?id=eq.'+id)
+        .then(function(){ liveWhyUs=liveWhyUs.filter(function(w){ return String(w.id)!==id; }); renderWhyUs(liveWhyUs); toast('Item deleted'); })
+        .catch(function(){ toast('Delete failed', true); });
+    }
+  });
+
+  $('#addWhyUs').addEventListener('click', function(){ openWhyModal(null); });
+
+  function openWhyModal(item){
+    var body = '<div class="field" style="margin-bottom:16px"><label>Icon Name</label>'
+      + '<input type="text" id="whyIcon" value="'+esc(item?item.icon||'shield':'shield')+'" placeholder="e.g. shield, clock, dollar, award"></div>'
+      + '<div class="field" style="margin-bottom:16px"><label>Title</label>'
+      + '<input type="text" id="whyTitle" value="'+esc(item?item.title||'':'')+'" placeholder="e.g. Licensed & Insured"></div>'
+      + '<div class="field"><label>Description</label>'
+      + '<textarea id="whyDesc" placeholder="Short tagline…">'+esc(item?(item.description||item.desc||''):'')+'</textarea></div>';
+    var foot = '<button class="btn btn-ghost" data-modal-close>Cancel</button>'
+      + '<button class="btn btn-orange" id="whySave">'+(item?'Save':'Add Item')+'</button>';
+    openModal(item?'Edit Item':'Add Why Us Item', body, foot);
+    $('#whySave').addEventListener('click', function(){
+      var title=$('#whyTitle').value.trim(), desc=$('#whyDesc').value.trim(), icon=$('#whyIcon').value.trim()||'shield';
+      if(!title){ toast('Please enter a title', true); return; }
+      var payload={icon:icon, title:title, description:desc};
+      var p = item
+        ? sbPatch('/rest/v1/why_us?id=eq.'+item.id, payload).then(function(){ toast('Item updated'); })
+        : sbPost('/rest/v1/why_us', Object.assign(payload,{sort_order:liveWhyUs.length+1})).then(function(){ toast('Item added'); });
+      p.then(function(){ loadWhyUsAdmin(); closeModal(); }).catch(function(){ toast('Save failed', true); });
+    });
+  }
+
+  /* =========================================================
+     SERVICE AREAS — list + add + delete + reorder
+  ========================================================= */
+  var liveAreas = [];
+
+  function renderAreaList(rows){
+    liveAreas = rows || [];
+    var list = $('#areaList');
+    list.innerHTML = rows.map(function(a){
+      return '<div class="list-row" draggable="true" data-id="'+a.id+'">'
+        + '<span class="drag-handle">'+ic('drag',2)+'</span>'
+        + '<div class="list-main"><h4>'+esc(a.name)+'</h4></div>'
+        + '<div class="list-actions">'
+        +   '<button class="btn btn-danger-soft btn-icon" data-del-area="'+a.id+'">'+ic('trash',2)+'</button>'
+        + '</div></div>';
+    }).join('');
+    makeSortable(list, '.list-row', function(order){
+      var patches = order.map(function(id, idx){
+        return sbPatch('/rest/v1/service_areas?id=eq.'+id, {sort_order: idx+1});
+      });
+      Promise.all(patches).catch(function(){ toast('Order save failed', true); });
+    });
+  }
+
+  function loadServiceAreasAdmin(){
+    sbGet('/rest/v1/service_areas?select=*&order=sort_order.asc')
+      .then(function(rows){ renderAreaList(rows||[]); areas = (rows||[]).map(function(r){ return r.name; }); renderTags(); })
+      .catch(function(){ renderAreaList([]); });
+  }
+
+  document.addEventListener('click', function(e){
+    var dl = e.target.closest('[data-del-area]');
+    if(dl){
+      var id = dl.dataset.delArea;
+      sbDelete('/rest/v1/service_areas?id=eq.'+id)
+        .then(function(){ liveAreas=liveAreas.filter(function(a){ return String(a.id)!==id; }); renderAreaList(liveAreas); toast('Area deleted'); })
+        .catch(function(){ toast('Delete failed', true); });
+    }
+  });
+
+  $('#addAreaBtn').addEventListener('click', function(){
+    var val = $('#newAreaInput').value.trim(); if(!val) return;
+    sbPost('/rest/v1/service_areas', {name:val, sort_order: liveAreas.length+1})
+      .then(function(){ $('#newAreaInput').value=''; loadServiceAreasAdmin(); toast('Area added'); })
+      .catch(function(){ toast('Add failed', true); });
   });
 
   /* =========================================================
@@ -841,16 +1050,33 @@ async function uploadToStorage(file, folder) {
 
   /* ---------- init ---------- */
   document.addEventListener('DOMContentLoaded', function() {
+    /* populate welcome name from stored session */
+    try {
+      var adminUser = JSON.parse(sessionStorage.getItem('adminUser') || '{}');
+      var displayName = adminUser.email ? adminUser.email.split('@')[0] : 'Admin';
+      var welcomeEl = document.getElementById('adminWelcome');
+      var welcomeDashEl = document.getElementById('adminWelcomeDash');
+      var avatarEl = document.getElementById('adminAvatar');
+      if(welcomeEl) welcomeEl.textContent = displayName;
+      if(welcomeDashEl) welcomeDashEl.textContent = displayName;
+      if(avatarEl) avatarEl.textContent = displayName.substring(0,2).toUpperCase();
+    } catch(e){}
+
     loadGalleryAdmin();
     renderTags();
     renderSocial();
     initBranding();
+    initBrandingSave();
     initUploaders();
+    initHeroSave();
+    initSettingsSave();
     loadDashboard();
     loadEnquiries();
     loadSettings();
     loadServices();
     loadReviews();
+    loadWhyUsAdmin();
+    loadServiceAreasAdmin();
   });
 
 })();

@@ -34,7 +34,8 @@ window.ICONS = {
   flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
   shield:'<path d="M20 13c0 5-3.5 7.5-7.7 8.95a1 1 0 0 1-.6.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
   pipe:'<path d="M4 8h8a4 4 0 0 1 4 4v8"/><path d="M2 6v4"/><path d="M18 18h4"/>',
-  shower:'<path d="M4 4h2a4 4 0 0 1 4 4v1"/><circle cx="6" cy="3" r="1"/><path d="M14 9h6l-1 9a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2z"/>'
+  shower:'<path d="M4 4h2a4 4 0 0 1 4 4v1"/><circle cx="6" cy="3" r="1"/><path d="M14 9h6l-1 9a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2z"/>',
+  pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>'
 };
 
 window.SERVICE_ICONS = ['droplet','filter','thermometer','search','wrench','flame','shield','pipe','shower','phone','image','star'];

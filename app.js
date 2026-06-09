@@ -413,6 +413,10 @@
           var h1 = document.getElementById('heroHeading');
           if(h1) h1.textContent = cfg.hero_heading;
         }
+        if(cfg.hero_subheading && cfg.hero_subheading.trim()){
+          var sub = document.getElementById('heroSubheading');
+          if(sub){ sub.textContent = cfg.hero_subheading; sub.style.display = ''; }
+        }
         if(cfg.hero_badge_text){
           var badgeBox = document.getElementById('heroBadgeBox');
           if(badgeBox) badgeBox.textContent = cfg.hero_badge_text;
