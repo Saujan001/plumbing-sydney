@@ -7,6 +7,33 @@ if (!adminToken) {
   window.location.href = 'login.html';
 }
 
+async function testAuth() {
+  const token = sessionStorage.getItem('adminToken');
+  console.log('=== AUTH TEST ===');
+  console.log('Token exists:', !!token);
+  console.log('Token length:', token ? token.length : 0);
+
+  const userRes = await fetch('https://zrkawewphxvskwkpsywi.supabase.co/auth/v1/user', {
+    headers: {
+      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpya2F3ZXdwaHh2c2t3a3BzeXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MTA5NDUsImV4cCI6MjA5NjQ4Njk0NX0.720XSZ7kEIVm0o0_RC6N18MwL_1YrQ-8nZ7dt6b9wLs',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  const userData = await userRes.json();
+  console.log('Auth user response:', userRes.status, JSON.stringify(userData));
+
+  const settingsRes = await fetch('https://zrkawewphxvskwkpsywi.supabase.co/rest/v1/settings?select=*', {
+    headers: {
+      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpya2F3ZXdwaHh2c2t3a3BzeXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MTA5NDUsImV4cCI6MjA5NjQ4Njk0NX0.720XSZ7kEIVm0o0_RC6N18MwL_1YrQ-8nZ7dt6b9wLs',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  const settingsData = await settingsRes.json();
+  console.log('Settings response:', settingsRes.status, JSON.stringify(settingsData));
+  console.log('=== END AUTH TEST ===');
+}
+testAuth();
+
 (function(){
   'use strict';
   var ICONS = window.ICONS, DATA = window.DATA;
