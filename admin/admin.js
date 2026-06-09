@@ -16,7 +16,6 @@ async function deleteFromStorage(publicUrl) {
     const filePath = publicUrl.substring(idx + marker.length);
     const token = localStorage.getItem('adminToken');
 
-    console.log('Deleting file:', filePath);
     const res = await fetch(`https://zrkawewphxvskwkpsywi.supabase.co/storage/v1/object/uploads/${filePath}`, {
       method: 'DELETE',
       headers: {
@@ -25,8 +24,8 @@ async function deleteFromStorage(publicUrl) {
       }
     });
     const responseText = await res.text();
-    console.log('Delete response status:', res.status);
-    console.log('Delete response body:', responseText);
+    if (res.status === 404) return;
+    if (!res.ok) console.warn('Delete failed:', responseText);
   } catch (e) {
     console.warn('Could not delete old file:', e);
   }
@@ -36,11 +35,6 @@ async function uploadToStorage(file, folder) {
   const ext = file.name.split('.').pop();
   const filename = `${folder}/${Date.now()}.${ext}`;
   const token = localStorage.getItem('adminToken');
-
-  console.log('Uploading to:', filename);
-  console.log('Token exists:', !!token);
-  console.log('File type:', file.type);
-  console.log('File size:', file.size);
 
   const res = await fetch(`https://zrkawewphxvskwkpsywi.supabase.co/storage/v1/object/uploads/${filename}`, {
     method: 'POST',
@@ -53,11 +47,10 @@ async function uploadToStorage(file, folder) {
     body: file
   });
 
-  const responseText = await res.text();
-  console.log('Upload response status:', res.status);
-  console.log('Upload response body:', responseText);
-
-  if (!res.ok) throw new Error(responseText);
+  if (!res.ok) {
+    const responseText = await res.text();
+    throw new Error(responseText);
+  }
 
   return `https://zrkawewphxvskwkpsywi.supabase.co/storage/v1/object/public/uploads/${filename}`;
 }
