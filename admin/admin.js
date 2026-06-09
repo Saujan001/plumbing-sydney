@@ -15,36 +15,51 @@ async function deleteFromStorage(publicUrl) {
     if (idx === -1) return;
     const filePath = publicUrl.substring(idx + marker.length);
     const token = localStorage.getItem('adminToken');
-    await fetch(`${SUPABASE_URL}/storage/v1/object/uploads/${filePath}`, {
+
+    console.log('Deleting file:', filePath);
+    const res = await fetch(`https://zrkawewphxvskwkpsywi.supabase.co/storage/v1/object/uploads/${filePath}`, {
       method: 'DELETE',
       headers: {
-        'apikey': SUPABASE_ANON_KEY,
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpya2F3ZXdwaHh2c2t3a3BzeXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MTA5NDUsImV4cCI6MjA5NjQ4Njk0NX0.720XSZ7kEIVm0o0_RC6N18MwL_1YrQ-8nZ7dt6b9wLs',
         'Authorization': `Bearer ${token}`
       }
     });
+    const responseText = await res.text();
+    console.log('Delete response status:', res.status);
+    console.log('Delete response body:', responseText);
   } catch (e) {
-    console.warn('Could not delete old file from storage:', e);
+    console.warn('Could not delete old file:', e);
   }
 }
 
 async function uploadToStorage(file, folder) {
   const ext = file.name.split('.').pop();
   const filename = `${folder}/${Date.now()}.${ext}`;
-  const token = sessionStorage.getItem('adminToken');
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/uploads/${filename}`, {
+  const token = localStorage.getItem('adminToken');
+
+  console.log('Uploading to:', filename);
+  console.log('Token exists:', !!token);
+  console.log('File type:', file.type);
+  console.log('File size:', file.size);
+
+  const res = await fetch(`https://zrkawewphxvskwkpsywi.supabase.co/storage/v1/object/uploads/${filename}`, {
     method: 'POST',
     headers: {
-      'apikey': SUPABASE_ANON_KEY,
+      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpya2F3ZXdwaHh2c2t3a3BzeXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MTA5NDUsImV4cCI6MjA5NjQ4Njk0NX0.720XSZ7kEIVm0o0_RC6N18MwL_1YrQ-8nZ7dt6b9wLs',
       'Authorization': `Bearer ${token}`,
-      'Content-Type': file.type
+      'Content-Type': file.type,
+      'x-upsert': 'true'
     },
     body: file
   });
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.message || 'Upload failed');
-  }
-  return `${SUPABASE_URL}/storage/v1/object/public/uploads/${filename}`;
+
+  const responseText = await res.text();
+  console.log('Upload response status:', res.status);
+  console.log('Upload response body:', responseText);
+
+  if (!res.ok) throw new Error(responseText);
+
+  return `https://zrkawewphxvskwkpsywi.supabase.co/storage/v1/object/public/uploads/${filename}`;
 }
 
 (function(){
