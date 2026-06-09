@@ -392,6 +392,23 @@
           var waUrl = 'https://wa.me/' + waNum;
           document.querySelectorAll('.fab-wa, .mbtn-wa').forEach(function(a){ a.href = waUrl; });
         }
+
+        if(cfg.hero_photo && cfg.hero_photo.trim()){
+          var heroSlot = document.querySelector('#hero-photo');
+          if(heroSlot){
+            var heroImg = document.createElement('img');
+            heroImg.src = cfg.hero_photo;
+            heroImg.alt = 'Hero photo';
+            heroImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+            heroSlot.replaceWith(heroImg);
+          }
+        }
+
+        if(cfg.logo_url && cfg.logo_url.trim()){
+          document.querySelectorAll('.brand-mark').forEach(function(el){
+            el.innerHTML = '<img src="'+cfg.logo_url+'" alt="Logo" style="width:100%;height:100%;object-fit:contain">';
+          });
+        }
       })
       .catch(function(){}); /* silent — hardcoded values remain */
   }
