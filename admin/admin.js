@@ -1058,6 +1058,13 @@ async function uploadToStorage(file, folder) {
 
   /* ---------- init ---------- */
   document.addEventListener('DOMContentLoaded', function() {
+    const debugToken = localStorage.getItem('adminToken');
+    console.log('=== TOKEN DEBUG ===');
+    console.log('Token exists:', !!debugToken);
+    console.log('Token length:', debugToken ? debugToken.length : 0);
+    console.log('Token preview:', debugToken ? debugToken.substring(0, 60) : 'NULL');
+    console.log('All localStorage keys:', Object.keys(localStorage));
+
     /* populate welcome name from stored session */
     try {
       var adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
