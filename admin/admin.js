@@ -71,9 +71,42 @@ async function uploadToStorage(file, folder) {
   function $all(s,r){ return [].slice.call((r||document).querySelectorAll(s)); }
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
+  /* ---- token refresh ---- */
+  function refreshToken(){
+    var rt = localStorage.getItem('adminRefreshToken');
+    if(!rt) return Promise.reject(new Error('No refresh token'));
+    return fetch(SUPABASE_URL + '/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: rt })
+    }).then(function(res){ return res.json(); }).then(function(data){
+      if(!data.access_token) throw new Error('Refresh failed');
+      localStorage.setItem('adminToken', data.access_token);
+      if(data.refresh_token) localStorage.setItem('adminRefreshToken', data.refresh_token);
+      return data.access_token;
+    });
+  }
+
   /* ---- shared fetch helpers ---- */
   function sbFetch(url, opts){
     return fetch(url, opts).then(function(res){
+      if(res.status === 401){
+        return refreshToken().then(function(newToken){
+          var newOpts = Object.assign({}, opts, {
+            headers: Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + newToken })
+          });
+          return fetch(url, newOpts).then(function(res2){
+            if(!res2.ok) return res2.text().then(function(t){ throw new Error(t||res2.status); });
+            var ct2 = res2.headers.get('content-type')||'';
+            return ct2.includes('json') ? res2.json() : res2.text().then(function(){ return null; });
+          });
+        }).catch(function(){
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('adminRefreshToken');
+          localStorage.removeItem('adminUser');
+          window.location.replace('login.html');
+        });
+      }
       if(!res.ok) return res.text().then(function(t){ throw new Error(t||res.status); });
       var ct = res.headers.get('content-type')||'';
       return ct.includes('json') ? res.json() : res.text().then(function(){ return null; });
@@ -1058,22 +1091,6 @@ async function uploadToStorage(file, folder) {
 
   /* ---------- init ---------- */
   document.addEventListener('DOMContentLoaded', function() {
-    const debugToken = localStorage.getItem('adminToken');
-    console.log('=== TOKEN DEBUG ===');
-    console.log('Token exists:', !!debugToken);
-    console.log('Token length:', debugToken ? debugToken.length : 0);
-    console.log('Token preview:', debugToken ? debugToken.substring(0, 60) : 'NULL');
-    console.log('All localStorage keys:', Object.keys(localStorage));
-    console.log('=== HEADERS DEBUG ===');
-    console.log('supabaseAdmin.headers:', JSON.stringify(supabaseAdmin.headers));
-    console.log('SUPABASE_URL:', typeof SUPABASE_URL !== 'undefined' ? SUPABASE_URL : 'UNDEFINED');
-    console.log('SUPABASE_ANON_KEY defined:', typeof SUPABASE_ANON_KEY !== 'undefined');
-    try {
-      var payload = JSON.parse(atob(debugToken.split('.')[1]));
-      var expiry = new Date(payload.exp * 1000);
-      console.log('Token expiry:', expiry.toISOString(), '| Expired:', expiry < new Date());
-    } catch(e) { console.log('Could not decode token:', e); }
-
     /* populate welcome name from stored session */
     try {
       var adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
