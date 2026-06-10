@@ -398,7 +398,11 @@
             var heroImg = document.createElement('img');
             heroImg.src = cfg.hero_photo;
             heroImg.alt = 'Hero photo';
-            heroImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+            heroImg.style.width = '100%';
+            heroImg.style.height = '100%';
+            heroImg.style.objectFit = 'cover';
+            heroImg.style.objectPosition = 'center top';
+            heroImg.style.display = 'block';
             heroSlot.replaceWith(heroImg);
           }
         }
