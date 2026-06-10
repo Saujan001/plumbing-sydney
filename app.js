@@ -604,6 +604,12 @@
       .then(function(res){ return res.ok ? res.json() : []; })
       .then(function(rows){
         if(!rows || !rows.length) return;
+        /* deduplicate by name in case of duplicate DB rows */
+        var seen = {};
+        rows = rows.filter(function(a){
+          if(seen[a.name]) return false;
+          seen[a.name] = true; return true;
+        });
         var chips = document.getElementById('mapChips');
         if(chips){
           chips.innerHTML = rows.map(function(a){
