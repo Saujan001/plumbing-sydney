@@ -216,7 +216,8 @@ h1,h2,h3{color:var(--ink);font-weight:800;letter-spacing:-.02em;line-height:1.12
 .gallery-page{display:none}
 .gallery-page.active{display:block}
 .masonry{columns:3;column-gap:22px}
-.masonry image-slot{width:100%;margin-bottom:22px;break-inside:avoid;box-shadow:var(--shadow);border-radius:var(--r)}
+.masonry img,.gal-ph{width:100%;margin-bottom:22px;break-inside:avoid;box-shadow:var(--shadow);border-radius:var(--r);display:block}
+.gal-ph{background:#e8edf5}
 .dots{display:flex;justify-content:center;gap:10px;margin-top:34px}
 .dots button{width:10px;height:10px;border-radius:50%;background:#d4dae6;transition:.2s ease}
 .dots button.active{background:var(--orange);width:30px;border-radius:999px}
