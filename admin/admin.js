@@ -1064,6 +1064,15 @@ async function uploadToStorage(file, folder) {
     console.log('Token length:', debugToken ? debugToken.length : 0);
     console.log('Token preview:', debugToken ? debugToken.substring(0, 60) : 'NULL');
     console.log('All localStorage keys:', Object.keys(localStorage));
+    console.log('=== HEADERS DEBUG ===');
+    console.log('supabaseAdmin.headers:', JSON.stringify(supabaseAdmin.headers));
+    console.log('SUPABASE_URL:', typeof SUPABASE_URL !== 'undefined' ? SUPABASE_URL : 'UNDEFINED');
+    console.log('SUPABASE_ANON_KEY defined:', typeof SUPABASE_ANON_KEY !== 'undefined');
+    try {
+      var payload = JSON.parse(atob(debugToken.split('.')[1]));
+      var expiry = new Date(payload.exp * 1000);
+      console.log('Token expiry:', expiry.toISOString(), '| Expired:', expiry < new Date());
+    } catch(e) { console.log('Could not decode token:', e); }
 
     /* populate welcome name from stored session */
     try {
